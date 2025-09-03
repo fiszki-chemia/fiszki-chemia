@@ -19,18 +19,18 @@ function App() {
 
   // Pobieranie unikalnych kategorii z bazy
   useEffect(() => {
-    async function fetchCategories() {
+    async function fetchTopics() {
       const { data, error } = await supabase
         .from('flashcards')
-        .select('category')
-        .neq('category', null)
+        .select('topic')
+        .neq('topic', null)
       if (error) console.log(error)
       else {
-        const uniqueCats = [...new Set(data.map(fc => fc.category))]
-        setCategories(uniqueCats)
+        const uniqueCats = [...new Set(data.map(fc => fc.topic))]
+        setTopic(uniqueCats)
       }
     }
-    fetchCategories()
+    fetchTopic()
   }, [])
 
   return (
@@ -44,15 +44,15 @@ function App() {
             {categories.map(cat => (
               <button
                 key={cat}
-                onClick={() => setCategory(cat)}
+                onClick={() => setTopic(cat)}
                 style={{ marginRight: '10px' }}
               >
                 {cat}
               </button>
             ))}
-            <button onClick={() => setCategory(null)}>Wszystkie</button>
+            <button onClick={() => setTopic(null)}>Wszystkie</button>
           </div>
-          <FlashcardList category={category} />
+          <FlashcardList topic={topic} />
         </>
       )}
     </div>
