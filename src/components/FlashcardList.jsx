@@ -8,7 +8,7 @@ function FlashcardList({ topic }) {
   useEffect(() => {
     async function fetchFlashcards() {
       let query = supabase.from('flashcards').select('*')
-      if (topic) query = query.eq('topic', topic)  // <-- zmienione
+      if (topic) query = query.eq('topic', topic)
       const { data, error } = await query
       if (error) console.log(error)
       else setFlashcards(data)
@@ -17,7 +17,7 @@ function FlashcardList({ topic }) {
   }, [topic])
 
   return (
-    <div>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {flashcards?.map(fc => (
         <Flashcard key={fc.id} question={fc.question} answer={fc.answer} />
       ))}
