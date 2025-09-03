@@ -45,4 +45,18 @@ function App() {
               <button
                 key={cat}
                 onClick={() => setCategory(cat)}
-                style={{ marginRight: '10
+                style={{ marginRight: '10px' }}
+              >
+                {cat}
+              </button>
+            ))}
+            <button onClick={() => setCategory(null)}>Wszystkie</button>
+          </div>
+          <FlashcardList category={category} />
+        </>
+      )}
+    </div>
+  )
+}
+
+export default App
