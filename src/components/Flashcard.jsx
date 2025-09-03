@@ -1,8 +1,12 @@
-export default function Flashcard({ card }) {
+import React from 'react'
+
+function Flashcard({ question, answer }) {
   return (
-    <div className="p-4 my-2 bg-gray-100 rounded shadow">
-      <p className="font-semibold">{card.question}</p>
-      <p className="text-gray-500">{card.answer}</p>
+    <div style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
+      <p><b>Pytanie:</b> {question}</p>
+      <p><b>Odpowiedź:</b> {answer}</p>
     </div>
   )
 }
+
+export default Flashcard
