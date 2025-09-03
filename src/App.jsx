@@ -1,10 +1,22 @@
-import FlashcardList from './components/FlashcardList'
+import React, { useState, useEffect } from 'react'
+import { supabase } from './supabase.js'
+import Login from './components/Login.jsx'
+import FlashcardList from './components/FlashcardList.jsx'
 
-export default function App() {
+function App() {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const session = supabase.auth.getSession().then(({ data }) => setUser(data.session?.user || null))
+    supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user || null))
+  }, [])
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Fiszki z chemii</h1>
-      <FlashcardList />
+    <div style={{ padding: '20px' }}>
+      <h1>Fiszki Chemia</h1>
+      {!user ? <Login /> : <FlashcardList />}
     </div>
   )
 }
+
+export default App
