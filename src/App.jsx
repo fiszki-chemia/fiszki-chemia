@@ -5,19 +5,17 @@ import FlashcardList from './components/FlashcardList.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
-  const [category, setCategory] = useState(null)
-  const [categories, setCategories] = useState([])
+  const [topic, setTopic] = useState(null)       // zmienione
+  const [topics, setTopics] = useState([])       // lista tematów
 
-  // Sprawdzenie sesji i subskrypcja zmian
+  // Sprawdzenie sesji
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user || null)
-    })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user || null))
     return () => listener.subscription.unsubscribe()
   }, [])
 
-  // Pobieranie unikalnych kategorii z bazy
+  // Pobieranie unikalnych tematów
   useEffect(() => {
     async function fetchTopics() {
       const { data, error } = await supabase
@@ -26,11 +24,11 @@ function App() {
         .neq('topic', null)
       if (error) console.log(error)
       else {
-        const uniqueCats = [...new Set(data.map(fc => fc.topic))]
-        setTopic(uniqueCats)
+        const uniqueTopics = [...new Set(data.map(fc => fc.topic))]
+        setTopics(uniqueTopics)
       }
     }
-    fetchTopic()
+    fetchTopics()
   }, [])
 
   return (
@@ -41,18 +39,18 @@ function App() {
       ) : (
         <>
           <div style={{ marginBottom: '20px' }}>
-            {categories.map(cat => (
+            {topics.map(t => (
               <button
-                key={cat}
-                onClick={() => setTopic(cat)}
+                key={t}
+                onClick={() => setTopic(t)}
                 style={{ marginRight: '10px' }}
               >
-                {cat}
+                {t}
               </button>
             ))}
             <button onClick={() => setTopic(null)}>Wszystkie</button>
           </div>
-          <FlashcardList topic={topic} />
+          <FlashcardList topic={topic} />  {/* <-- zmienione */}
         </>
       )}
     </div>
