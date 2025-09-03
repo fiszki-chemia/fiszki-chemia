@@ -8,7 +8,7 @@ function FlashcardList({ topic }) {
   useEffect(() => {
     async function fetchFlashcards() {
       let query = supabase.from('flashcards').select('*')
-      if (topic) query = query.eq('topic', topic)
+      if (topic) query = query.eq('topic', topic)  // <-- zmienione
       const { data, error } = await query
       if (error) console.log(error)
       else setFlashcards(data)
