@@ -1,23 +1,29 @@
-import { useEffect, useState } from 'react'
-import { supabase } from '../supabase'
-import Flashcard from './Flashcard'
+import React, { useEffect, useState } from 'react'
+import Flashcard from './Flashcard.jsx'
+import { supabase } from '../supabase.js'
 
-export default function FlashcardList() {
-  const [cards, setCards] = useState([])
+function FlashcardList({ category }) {
+  const [flashcards, setFlashcards] = useState([])
 
   useEffect(() => {
-    const fetchCards = async () => {
-      let { data, error } = await supabase.from('flashcards').select('*')
-      if (!error) setCards(data)
-    }
-    fetchCards()
-  }, [])
+    fetchFlashcards()
+  }, [category]) // <- zmienia się po wyborze działu
+
+  async function fetchFlashcards() {
+    let query = supabase.from('flashcards').select('*')
+    if (category) query = query.eq('category', category)
+    const { data, error } = await query
+    if (error) console.log(error)
+    else setFlashcards(data)
+  }
 
   return (
     <div>
-      {cards.map((card) => (
-        <Flashcard key={card.id} card={card} />
+      {flashcards.map(fc => (
+        <Flashcard key={fc.id} question={fc.question} answer={fc.answer} />
       ))}
     </div>
   )
 }
+
+export default FlashcardList
