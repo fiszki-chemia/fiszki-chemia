@@ -5,54 +5,50 @@ import FlashcardList from './components/FlashcardList.jsx'
 
 function App() {
   const [user, setUser] = useState(null)
-  const [topic, setTopic] = useState(null)       // zmienione
-  const [topics, setTopics] = useState([])       // lista tematów
+  const [topics, setTopics] = useState([])
+  const [selectedTopic, setSelectedTopic] = useState(null)
 
-  // Sprawdzenie sesji
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user || null))
     return () => listener.subscription.unsubscribe()
   }, [])
 
-  // Pobieranie unikalnych tematów
   useEffect(() => {
     async function fetchTopics() {
       const { data, error } = await supabase
         .from('flashcards')
-        .select('topic')
+        .select('topic, topic_name')
         .neq('topic', null)
-      if (error) console.log(error)
-      else {
-        const uniqueTopics = [...new Set(data.map(fc => fc.topic))]
+      if (!error) {
+        const uniqueTopics = Array.from(
+          new Map(data.map(fc => [fc.topic, fc])).values()
+        )
         setTopics(uniqueTopics)
       }
     }
     fetchTopics()
   }, [])
 
+  if (!user) return <Login />
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Fiszki Chemia</h1>
-      {!user ? (
-        <Login />
-      ) : (
-        <>
-          <div style={{ marginBottom: '20px' }}>
-            {topics.map(t => (
-              <button
-                key={t}
-                onClick={() => setTopic(t)}
-                style={{ marginRight: '10px' }}
-              >
-                {t}
-              </button>
-            ))}
-            <button onClick={() => setTopic(null)}>Wszystkie</button>
-          </div>
-          <FlashcardList topic={topic} />  {/* <-- zmienione */}
-        </>
-      )}
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <div style={{ width: '200px', borderRight: '1px solid #ccc', padding: '20px' }}>
+        {topics.map(t => (
+          <button
+            key={t.topic}
+            onClick={() => setSelectedTopic(t.topic)}
+            style={{ display: 'block', width: '100%', marginBottom: '10px', padding: '10px', cursor: 'pointer' }}
+          >
+            {t.topic_name}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        {selectedTopic && <FlashcardList selectedTopic={selectedTopic} />}
+      </div>
     </div>
   )
 }

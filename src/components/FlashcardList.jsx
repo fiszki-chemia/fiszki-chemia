@@ -1,28 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import Flashcard from './Flashcard.jsx'
+import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
+import FlashcardNavigator from './FlashcardNavigator.jsx'
 
-function FlashcardList({ topic }) {
+export default function FlashcardList({ selectedTopic }) {
   const [flashcards, setFlashcards] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (!selectedTopic) return
+    let active = true
     async function fetchFlashcards() {
-      let query = supabase.from('flashcards').select('*')
-      if (topic) query = query.eq('topic', topic)
-      const { data, error } = await query
-      if (error) console.log(error)
-      else setFlashcards(data)
+      setLoading(true)
+      setError(null)
+      try {
+        const { data, error } = await supabase
+          .from('flashcards')
+          .select('*')
+          .eq('topic', selectedTopic)
+        if (error) throw error
+        if (active) setFlashcards(Array.isArray(data) ? data : [])
+      } catch (e) {
+        console.error(e)
+        if (active) {
+          setError('Błąd ładowania fiszek')
+          setFlashcards([])
+        }
+      } finally {
+        if (active) setLoading(false)
+      }
     }
     fetchFlashcards()
-  }, [topic])
+    return () => { active = false }
+  }, [selectedTopic])
 
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-      {flashcards?.map(fc => (
-        <Flashcard key={fc.id} question={fc.question} answer={fc.answer} />
-      ))}
-    </div>
-  )
+  if (loading) return <div>Ładowanie fiszek...</div>
+  if (error) return <div>{error}</div>
+  if (!flashcards.length) return <div>Brak fiszek w tej kategorii</div>
+
+  return <FlashcardNavigator flashcards={flashcards} />
 }
-
-export default FlashcardList

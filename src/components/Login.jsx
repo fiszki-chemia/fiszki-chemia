@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '../supabase'
+import { supabase } from '../supabase.js'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -9,17 +9,17 @@ export default function Login() {
   const handleSubmit = async () => {
     if (isRegister) {
       // Rejestracja
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
-        password
+        password,
       })
       if (error) alert('Błąd: ' + error.message)
       else alert('Konto utworzone! Możesz się teraz zalogować.')
     } else {
       // Logowanie
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
       })
       if (error) alert('Błąd: ' + error.message)
       else alert('Zalogowano!')
@@ -27,15 +27,23 @@ export default function Login() {
   }
 
   return (
-    <div className="p-4 max-w-sm mx-auto">
-      <h2 className="text-xl font-bold mb-4">{isRegister ? 'Rejestracja' : 'Logowanie'}</h2>
+    <div style={{ padding: '20px', maxWidth: '400px', margin: '40px auto', border: '1px solid #ccc', borderRadius: '8px' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>
+        {isRegister ? 'Rejestracja' : 'Logowanie'}
+      </h2>
 
       <input
         type="email"
         placeholder="Twój e-mail"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="border p-2 mb-2 w-full rounded"
+        style={{
+          border: '1px solid #ccc',
+          padding: '10px',
+          marginBottom: '12px',
+          width: '100%',
+          borderRadius: '4px',
+        }}
       />
 
       <input
@@ -43,21 +51,39 @@ export default function Login() {
         placeholder="Hasło"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="border p-2 mb-4 w-full rounded"
+        style={{
+          border: '1px solid #ccc',
+          padding: '10px',
+          marginBottom: '16px',
+          width: '100%',
+          borderRadius: '4px',
+        }}
       />
 
       <button
         onClick={handleSubmit}
-        className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+        style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          padding: '10px',
+          width: '100%',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+        }}
       >
         {isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
       </button>
 
-      <p className="mt-2 text-center">
+      <p style={{ marginTop: '16px', textAlign: 'center' }}>
         {isRegister ? 'Masz konto?' : 'Nie masz konta?'}{' '}
         <span
           onClick={() => setIsRegister(!isRegister)}
-          className="text-blue-500 cursor-pointer underline"
+          style={{
+            color: '#3b82f6',
+            cursor: 'pointer',
+            textDecoration: 'underline',
+          }}
         >
           {isRegister ? 'Zaloguj się' : 'Zarejestruj się'}
         </span>
