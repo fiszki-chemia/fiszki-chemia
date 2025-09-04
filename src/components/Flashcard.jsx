@@ -6,7 +6,7 @@ export default function Flashcard({ question, answer, flipped }) {
       style={{
         width: '100%',
         height: '100%',
-        perspective: '1000px', // dodaj perspektywę
+        perspective: '1000px', // perspektywa
       }}
     >
       <div
@@ -17,8 +17,10 @@ export default function Flashcard({ question, answer, flipped }) {
           transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
           transition: 'transform 0.6s',
           transformStyle: 'preserve-3d',
+          // ramka i tło na kontenerze obracającym się
           border: '1px solid black',
           borderRadius: '8px',
+          backgroundColor: '#fff',
           cursor: 'pointer',
         }}
       >
@@ -31,7 +33,6 @@ export default function Flashcard({ question, answer, flipped }) {
             backfaceVisibility: 'hidden',
             borderRadius: '8px',
             padding: '20px',
-            backgroundColor: '#fff',
           }}
         >
           <p><b>Pytanie:</b></p>
@@ -48,7 +49,6 @@ export default function Flashcard({ question, answer, flipped }) {
             transform: 'rotateY(180deg)',
             borderRadius: '8px',
             padding: '20px',
-            backgroundColor: '#fff',
           }}
         >
           <p><b>Odpowiedź:</b></p>
