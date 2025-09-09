@@ -25,6 +25,7 @@ export default function Flashcard({ question, answer, flipped }) {
       >
         {/* Przód */}
         <div
+          className = "flashcard-front"
           style={{
             position: 'absolute',
             top: 0,
@@ -44,6 +45,7 @@ export default function Flashcard({ question, answer, flipped }) {
 
         {/* Tył */}
         <div
+          className = "flashcard-back"
           style={{
             position: 'absolute',
             top: 0,
