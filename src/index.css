@@ -50,8 +50,8 @@ body.light .flashcard-front {
   padding: 20px;
   box-sizing: border-box;
   border-radius: 8px;
-  background-color: #D6D8C5;
-  color: #79DA93;
+  background-color: #F4F7E1;
+  color: #C6FFC6;
   border: 1px solid black;
   backface-visibility: hidden;
   display: flex;
@@ -90,8 +90,8 @@ body.light .flashcard-back {
   padding: 20px;
   box-sizing: border-box;
   border-radius: 8px;
-  background-color: #D6D8C5;
-  color: #79DA93;
+  background-color: #F4F7E1;
+  color: #C6FFC6;
   border: 1px solid black;
   backface-visibility: hidden;
   transform: rotateY(180deg);
@@ -100,4 +100,5 @@ body.light .flashcard-back {
   justify-content: center;
   align-items: center;
 }
+
 
