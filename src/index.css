@@ -8,8 +8,8 @@ body.dark {
 body.light {
   margin: 0;
   padding: 0;
-  background-color: #ECEBDF;
-  color: #79DA93;
+  background-color: #F5F1E6;
+  color: #3B6B48;
 }
 
 /* Flashcard kontener */
@@ -34,7 +34,7 @@ body.dark .flashcard-front {
   border-radius: 8px;
   background-color: #25282C;
   color: #4277B5;
-  border: 1px solid black;
+  border: 1px #79DAFF;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
@@ -50,9 +50,9 @@ body.light .flashcard-front {
   padding: 20px;
   box-sizing: border-box;
   border-radius: 8px;
-  background-color: #F4F7E1;
-  color: #7BDC7B;
-  border: 1px #D0C7B6;
+  background-color: #D8C8B4;
+  color: #3B6B48;
+  border: 1px #A67B5B;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
@@ -72,7 +72,7 @@ body.dark .flashcard-back {
   border-radius: 8px;
   background-color: #25282C;
   color: #4277B5;
-  border: 1px solid black;
+  border: 1px #79DAFF;
   backface-visibility: hidden;
   transform: rotateY(180deg);
   display: flex;
@@ -90,9 +90,9 @@ body.light .flashcard-back {
   padding: 20px;
   box-sizing: border-box;
   border-radius: 8px;
-  background-color: #F4F7E1;
-  color: #7BDC7B;
-  border: 1px #D0C7B6;
+  background-color: #D8C8B4;
+  color: #3B6B48;
+  border: 1px #A67B5B;
   backface-visibility: hidden;
   transform: rotateY(180deg);
   display: flex;
@@ -100,6 +100,7 @@ body.light .flashcard-back {
   justify-content: center;
   align-items: center;
 }
+
 
 
 
