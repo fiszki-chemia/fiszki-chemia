@@ -65,7 +65,7 @@ export default function FlashcardNavigator({ flashcards }) {
         gap: 10,
         margin: '20px auto',
         height: 220,
-        color: #3977bd,
+        color: #4277B5,
         
       }}
     >
