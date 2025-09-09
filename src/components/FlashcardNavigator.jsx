@@ -54,7 +54,7 @@ export default function FlashcardNavigator({ flashcards, darkMode }) {
     height: 40,
     lineHeight: '40px',
     padding: 0,
-    color: arrowColor, // tutaj poprawna nazwa
+    color: arrowColor, 
   }
 
   return (
