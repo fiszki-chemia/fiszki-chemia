@@ -43,7 +43,7 @@ export default function FlashcardNavigator({ flashcards, darkMode }) {
 
   const card = flashcards[currentIndex]
   const arrowColWidth = 60
-  const arrowColor = darkMode ? '#79DAFF' : '#A67B5B' // dostosuj kolory do motywu
+  const arrowColor = darkMode ? '#5AA1BD' : '#A67B5B' // dostosuj kolory do motywu
 
   const arrowStyleBase = {
     cursor: 'pointer',
