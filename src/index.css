@@ -4,7 +4,15 @@ body{
   background-color: #0E0E0F;
   color: #4277B5;
 }
-.flashcard-inner > div{
+.flashcard-front > div{
+  background-color: #25282C;
+  color: #4277B5;
+  padding: 20px;
+  margin: 10px;
+  border: '1px solid black',
+  borderRadius: '8px',
+}
+.flashcard-back > div{
   background-color: #25282C;
   color: #4277B5;
   padding: 20px;
