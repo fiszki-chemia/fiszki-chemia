@@ -61,7 +61,7 @@ function App() {
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          {selectedTopic && <FlashcardList selectedTopic={selectedTopic} />}
+          {selectedTopic && <FlashcardList selectedTopic={selectedTopic} darkMode={darkMode} />}
         </div>
       </div>
     </div>
