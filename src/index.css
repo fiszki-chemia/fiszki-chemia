@@ -1,8 +1,15 @@
-body {
+body.dark {
   margin: 0;
   padding: 0;
   background-color: #0E0E0F;
   color: #4277B5;
+}
+
+body.light {
+  margin: 0;
+  padding: 0;
+  background-color: #ECEBDF;
+  color: #79DA93;
 }
 
 /* Flashcard kontener */
@@ -16,7 +23,7 @@ body {
 }
 
 /* Przód fiszki */
-.flashcard-front {
+body.dark.flashcard-front {
   position: absolute;
   top: 0;
   left: 0;
@@ -34,9 +41,27 @@ body {
   justify-content: center;
   align-items: center;
 }
+body.light.flashcard-front {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #D6D8C5;
+  color: #79DA93;
+  border: 1px solid black;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 /* Tył fiszki */
-.flashcard-back {
+body.dark.flashcard-back {
   position: absolute;
   top: 0;
   left: 0;
@@ -47,6 +72,26 @@ body {
   border-radius: 8px;
   background-color: #25282C;
   color: #4277B5;
+  border: 1px solid black;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+body.light.flashcard-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color: #D6D8C5;
+  color: #79DA93;
   border: 1px solid black;
   backface-visibility: hidden;
   transform: rotateY(180deg);
