@@ -36,13 +36,36 @@ function App() {
     document.body.className = darkMode ? 'dark' : 'light'
   }, [darkMode])
 
+
+const themeButtonStyle = {
+  backgroundColor: darkMode ? '#79DAFF' : '#A67B5B',
+  color: darkMode ? '#0E0E0F' : '#ECEBDF',
+  margin: '10px',
+  padding: '5px 10px',
+  cursor: 'pointer',
+  borderRadius: '6px',
+  border: 'none'
+}
+
+const buttonStyle = {
+  background-color: darkMode ? '#79DAFF' : '#A67B5B',
+  color: darkMode ? '#0E0E0F' : '#ECEBDF',
+  marginBottom: '10px',
+  padding: '10px',
+  cursor: 'pointer',
+  width: '100%',
+  textAlign: 'center',
+  borderRadius: '6px',
+  border: 'none',
+}
+  
   if (!user) return <Login />
 
   return (
     <div>
       <button
         onClick={() => setDarkMode(d => !d)}
-        style={{ margin: '10px', padding: '5px 10px', cursor: 'pointer'}}
+        style={themeButtonStyle}
       >
         {darkMode ? 'Tryb jasny' : 'Tryb ciemny'}
       </button>
@@ -53,7 +76,7 @@ function App() {
             <button
               key={t.topic}
               onClick={() => setSelectedTopic(t.topic)}
-              style={{ display: 'block', width: '100%', marginBottom: '10px', padding: '10px', cursor: 'pointer' }}
+              style={buttonStyle}
             >
               {t.topic_name}
             </button>
