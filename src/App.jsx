@@ -48,7 +48,7 @@ const themeButtonStyle = {
 }
 
 const buttonStyle = {
-  background-color: darkMode ? '#79DAFF' : '#A67B5B',
+  backgroundColor: darkMode ? '#79DAFF' : '#A67B5B',
   color: darkMode ? '#0E0E0F' : '#ECEBDF',
   marginBottom: '10px',
   padding: '10px',
