@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from './supabase.js'
 import Login from './components/Login.jsx'
 import FlashcardList from './components/FlashcardList.jsx'
+import './index.css'
 
 function App() {
   const [user, setUser] = useState(null)
