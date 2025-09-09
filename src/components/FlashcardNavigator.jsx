@@ -43,6 +43,7 @@ export default function FlashcardNavigator({ flashcards }) {
 
   const card = flashcards[currentIndex]
   const arrowColWidth = 60
+  const arrowColor = darkMode ? '#A67B5B' : '#79DAFF';
 
   const arrowStyleBase = {
     cursor: 'pointer',
@@ -53,7 +54,7 @@ export default function FlashcardNavigator({ flashcards }) {
     height: 40,
     lineHeight: '40px',
     padding: 0,
-    color: '#4277B5',
+    color: arrrowColor,
   }
 
   return (
