@@ -8,6 +8,7 @@ function App() {
   const [user, setUser] = useState(null)
   const [topics, setTopics] = useState([])
   const [selectedTopic, setSelectedTopic] = useState(null)
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
@@ -31,27 +32,41 @@ function App() {
     fetchTopics()
   }, [])
 
+    useEffect(() => {
+    document.body.className = darkMode ? 'dark' : 'light'
+  }, [darkMode])
+
   if (!user) return <Login />
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <div style={{ width: '200px', borderRight: '1px solid #ccc', padding: '20px' }}>
-        {topics.map(t => (
-          <button
-            key={t.topic}
-            onClick={() => setSelectedTopic(t.topic)}
-            style={{ display: 'block', width: '100%', marginBottom: '10px', padding: '10px', cursor: 'pointer' }}
-          >
-            {t.topic_name}
-          </button>
-        ))}
-      </div>
+    <div>
+      <button
+        onClick={() => setDarkMode(d => !d}
+        style = {{ margin = '10px', padding '5px 10px', cursor 'pointer'}}
+      >
+        {darkMode ? 'Tryb jasny' : 'Tryb ciemny'}
+      </button>
+      
+      <div style={{ display: 'flex', minHeight: '100vh' }}>
+        <div style={{ width: '200px', borderRight: '1px solid #ccc', padding: '20px' }}>
+          {topics.map(t => (
+            <button
+              key={t.topic}
+              onClick={() => setSelectedTopic(t.topic)}
+              style={{ display: 'block', width: '100%', marginBottom: '10px', padding: '10px', cursor: 'pointer' }}
+            >
+              {t.topic_name}
+            </button>
+          ))}
+        </div>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        {selectedTopic && <FlashcardList selectedTopic={selectedTopic} />}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          {selectedTopic && <FlashcardList selectedTopic={selectedTopic} />}
+        </div>
       </div>
     </div>
   )
 }
+
 
 export default App
