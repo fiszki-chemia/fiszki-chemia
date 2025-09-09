@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import FlashcardNavigator from './FlashcardNavigator.jsx'
 
-export default function FlashcardList({ selectedTopic }) {
+export default function FlashcardList({ selectedTopic, darkMode }) {
   const [flashcards, setFlashcards] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -38,5 +38,5 @@ export default function FlashcardList({ selectedTopic }) {
   if (error) return <div>{error}</div>
   if (!flashcards.length) return <div>Brak fiszek w tej kategorii</div>
 
-  return <FlashcardNavigator flashcards={flashcards} />
+  return <FlashcardNavigator flashcards={flashcards} darkMode={darkMode} />
 }
