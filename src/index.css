@@ -1,8 +1,18 @@
 body{
   margin: 0;
   padding: 0;
-  background-color: #151618;
+  background-color: #0E0E0F;
   color: #4277B5;
+}
+.flashcard{
+  background-color: #25282C;
+  color: #4277B5;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 
