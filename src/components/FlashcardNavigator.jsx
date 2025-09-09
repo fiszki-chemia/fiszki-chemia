@@ -53,6 +53,7 @@ export default function FlashcardNavigator({ flashcards }) {
     height: 40,
     lineHeight: '40px',
     padding: 0,
+    color: '#4277B5',
   }
 
   return (
@@ -65,8 +66,6 @@ export default function FlashcardNavigator({ flashcards }) {
         gap: 10,
         margin: '20px auto',
         height: 220,
-        color: '#4277B5',
-        
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'center' }}>
