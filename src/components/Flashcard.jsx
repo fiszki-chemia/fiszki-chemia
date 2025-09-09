@@ -10,6 +10,7 @@ export default function Flashcard({ question, answer, flipped }) {
       }}
     >
       <div
+        className = "flashcard-inner"
         style={{
           width: '100%',
           height: '100%',
