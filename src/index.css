@@ -23,7 +23,7 @@ body.light {
 }
 
 /* Przód fiszki */
-body.dark.flashcard-front {
+body.dark .flashcard-front {
   position: absolute;
   top: 0;
   left: 0;
@@ -41,7 +41,7 @@ body.dark.flashcard-front {
   justify-content: center;
   align-items: center;
 }
-body.light.flashcard-front {
+body.light .flashcard-front {
   position: absolute;
   top: 0;
   left: 0;
@@ -61,7 +61,7 @@ body.light.flashcard-front {
 }
 
 /* Tył fiszki */
-body.dark.flashcard-back {
+body.dark .flashcard-back {
   position: absolute;
   top: 0;
   left: 0;
@@ -81,7 +81,7 @@ body.dark.flashcard-back {
   align-items: center;
 }
 
-body.light.flashcard-back {
+body.light .flashcard-back {
   position: absolute;
   top: 0;
   left: 0;
@@ -100,3 +100,4 @@ body.light.flashcard-back {
   justify-content: center;
   align-items: center;
 }
+
