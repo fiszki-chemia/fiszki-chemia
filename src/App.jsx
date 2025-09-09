@@ -41,8 +41,8 @@ function App() {
   return (
     <div>
       <button
-        onClick={() => setDarkMode(d => !d}
-        style = {{ margin = '10px', padding '5px 10px', cursor 'pointer'}}
+        onClick={() => setDarkMode(d => !d)}
+        style = {{ margin: '10px', padding: '5px 10px', cursor: 'pointer'}}
       >
         {darkMode ? 'Tryb jasny' : 'Tryb ciemny'}
       </button>
