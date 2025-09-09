@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Flashcard from './Flashcard.jsx'
 
-export default function FlashcardNavigator({ flashcards }) {
+export default function FlashcardNavigator({ flashcards, darkMode }) {
   const [currentIndex, setCurrentIndex] = useState(null)
   const [history, setHistory] = useState([])
   const [flipped, setFlipped] = useState(false)
@@ -43,7 +43,7 @@ export default function FlashcardNavigator({ flashcards }) {
 
   const card = flashcards[currentIndex]
   const arrowColWidth = 60
-  const arrowColor = darkMode ? '#A67B5B' : '#79DAFF';
+  const arrowColor = darkMode ? '#79DAFF' : '#A67B5B' // dostosuj kolory do motywu
 
   const arrowStyleBase = {
     cursor: 'pointer',
@@ -54,7 +54,7 @@ export default function FlashcardNavigator({ flashcards }) {
     height: 40,
     lineHeight: '40px',
     padding: 0,
-    color: arrrowColor,
+    color: arrowColor, // tutaj poprawna nazwa
   }
 
   return (
@@ -98,12 +98,13 @@ export default function FlashcardNavigator({ flashcards }) {
       >
         <div
           onClick={() => setFlipped(f => !f)}
-          style={{ width: '280px', height: '100%' }} // karta węższa niż kolumna
+          style={{ width: '280px', height: '100%' }}
         >
           <Flashcard
             question={card?.question}
             answer={card?.answer}
             flipped={flipped}
+            darkMode={darkMode} // przekazujemy darkMode do Flashcard.jsx
           />
         </div>
       </div>
