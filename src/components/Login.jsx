@@ -41,8 +41,10 @@ export default function Login() {
     console.log('showNotification called');
     setMessage(message)
     setShowMessage(true)
+    console.log('wiadomosc wyswietlona');
     setTimeout(() => {
       setShowMessage(false)
+      console.log('wiadomosc znika');
     }, 3000) // Znika TwT
   }
 
