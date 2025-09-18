@@ -1,7 +1,7 @@
 body.dark {
   margin: 0;
   padding: 0;
-  background-color: #0E0E0F;
+  background-color: #070E0F;
   color: #4277B5;
 }
 
@@ -100,6 +100,7 @@ body.light .flashcard-back {
   justify-content: center;
   align-items: center;
 }
+
 
 
 
