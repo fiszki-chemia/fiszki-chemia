@@ -39,12 +39,12 @@ export default function Login() {
     }
   }
 
-  // Funkcja do wyświetlenia komunikatu na chwilę
+  // Wyświetla się prostokąt UwU
   const showNotification = () => {
     setShowMessage(true)
     setTimeout(() => {
       setShowMessage(false)
-    }, 3000) // Po 3 sekundach ukryj wiadomość
+    }, 3000) // Znika TwT
   }
 
   return (
