@@ -16,7 +16,7 @@ export default function Flashcard({ question, answer, flipped }) {
         </div>
 
         {/* Tył */}
-        <div className="flashcard-back">
+        <div className="flashcard-back", class="noselect">
           <p><b>Odpowiedź:</b></p>
           <p>{answer ?? '—'}</p>
         </div>
