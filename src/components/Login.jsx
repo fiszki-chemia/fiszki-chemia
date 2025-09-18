@@ -17,11 +17,9 @@ export default function Login() {
         password,
       })
       if (response.error) {
-        setMessage('Błąd: ' + response.error.message)
-        showNotification()
+        showNotification('Błąd: ' + response.error.message)
       } else {
-        setMessage('Konto utworzone! Możesz się teraz zalogować.')
-        showNotification()
+        showNotification('Konto utworzone! Możesz się teraz zalogować.')
       }
     } else {
       // Logowanie
@@ -30,17 +28,16 @@ export default function Login() {
         password,
       })
       if (response.error) {
-        setMessage('Błąd: ' + response.error.message)
-        showNotification()
+        showNotification('Błąd: ' + response.error.message)
       } else {
-        setMessage('Zalogowano!')
-        showNotification()
+        showNotification('Zalogowano!')
       }
     }
   }
 
   // Wyświetla się prostokąt UwU
-  const showNotification = () => {
+  const showNotification = (message) => {
+    setMessage(message)
     setShowMessage(true)
     setTimeout(() => {
       setShowMessage(false)
