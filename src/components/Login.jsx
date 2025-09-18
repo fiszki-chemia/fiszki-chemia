@@ -31,12 +31,14 @@ export default function Login() {
         showNotification('Błąd: ' + response.error.message)
       } else {
         showNotification('Zalogowano!')
+        console.log('logged in!');
       }
     }
   }
 
   // Wyświetla się prostokąt UwU
   const showNotification = (message) => {
+    console.log('showNotification called');
     setMessage(message)
     setShowMessage(true)
     setTimeout(() => {
