@@ -126,13 +126,13 @@ export default function Login() {
         </p>
       </div>
 
-      {/* Komunikat w lewym dolnym rogu */}
+      {/* Komunikat w prawym dolnym rogu */}
       {showMessage && (
         <div
           style={{
             position: 'fixed',
             bottom: '20px',
-            left: '20px',
+            right: '20px',
             backgroundColor: '#3b82f6',
             color: 'white',
             padding: '10px 20px',
