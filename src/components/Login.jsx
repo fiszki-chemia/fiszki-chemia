@@ -86,7 +86,7 @@ export default function Login({ initialMessage }) {
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '12px',
-            width: '200px',
+            width: '380px',
             borderRadius: '4px',
           }}
         />
@@ -100,7 +100,7 @@ export default function Login({ initialMessage }) {
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '16px',
-            width: '94%',
+            width: '380px',
             borderRadius: '4px',
           }}
         />
@@ -111,7 +111,7 @@ export default function Login({ initialMessage }) {
             backgroundColor: '#3b82f6',
             color: 'white',
             padding: '10px',
-            width: '100%',
+            width: '380px',
             borderRadius: '4px',
             cursor: 'pointer',
             fontWeight: 'bold',
