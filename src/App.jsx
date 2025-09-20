@@ -9,6 +9,7 @@ function App() {
   const [topics, setTopics] = useState([])
   const [selectedTopic, setSelectedTopic] = useState(null)
   const [darkMode, setDarkMode] = useState(false)
+  const [logoutMessage, setLogoutMessage] = useState('') 
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
