@@ -99,6 +99,7 @@ export default function Login({ initialMessage }) {
           style={{
             border: '1px solid #ccc',
             padding: '10px',
+            margin: '10px',
             marginBottom: '16px',
             width: '100%',
             borderRadius: '4px',
