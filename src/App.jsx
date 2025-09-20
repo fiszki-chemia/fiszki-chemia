@@ -38,7 +38,7 @@ function App() {
 
 const [toastMessage, setToastMessage] = useState('')
 const [showToast, setShowToast] = useState(false)
-const showToast = (message) => {
+const triggerToast = (message) => {
   setToastMessage(message)
   setShowToast(true)
   setTimeout(() => setShowToast(false), 3000)
@@ -96,9 +96,9 @@ const buttonStyle = {
           const { error } = await supabase.auth.signOut()
           if (!error) {
             setUser(null)
-            showToast('Pomyślnie wylogowano!')
+            triggerToast('Pomyślnie wylogowano!')
           } else {
-            showToast('Błąd przy wylogowywaniu!')
+            triggerToast('Błąd przy wylogowywaniu!')
           }
         }}
         style={logoutButtonStyle}
