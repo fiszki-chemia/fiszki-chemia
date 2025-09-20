@@ -86,7 +86,7 @@ export default function Login({ initialMessage }) {
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '12px',
-            width: '100%',
+            width: '80%',
             borderRadius: '4px',
           }}
         />
