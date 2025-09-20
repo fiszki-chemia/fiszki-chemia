@@ -86,7 +86,7 @@ export default function Login({ initialMessage }) {
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '12px',
-            width: '380px',
+            width: '379.5px',
             borderRadius: '4px',
           }}
         />
@@ -100,7 +100,7 @@ export default function Login({ initialMessage }) {
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '16px',
-            width: '380px',
+            width: '379.5px',
             borderRadius: '4px',
           }}
         />
