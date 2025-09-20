@@ -36,13 +36,11 @@ function App() {
     document.body.className = darkMode ? 'dark' : 'light'
   }, [darkMode])
 
-const [toastMessage, setToastMessage] = useState('')
-const [showToast, setShowToast] = useState(false)
-const triggerToast = (message) => {
-  setToastMessage(message)
-  setShowToast(true)
-  setTimeout(() => setShowToast(false), 3000)
-}
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setUser(null)
+    setLogoutMessage('Pomyślnie wylogowano!') // przekaż do Login
+  }
 
 
 const themeButtonStyle = {
@@ -80,7 +78,7 @@ const buttonStyle = {
     zIndex: 1000,
   }
   
-  if (!user) return <Login />
+  if (!user) return <Login initialMessage={logoutMessage} />
 
   return (
     <div>
@@ -92,15 +90,7 @@ const buttonStyle = {
       </button>
       
       <button
-        onClick={async () => {
-          const { error } = await supabase.auth.signOut()
-          if (!error) {
-            setUser(null)
-            triggerToast('Pomyślnie wylogowano!')
-          } else {
-            triggerToast('Błąd przy wylogowywaniu!')
-          }
-        }}
+        onClick={handleLogout}
         style={logoutButtonStyle}
       >
         Wyloguj
