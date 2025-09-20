@@ -36,6 +36,14 @@ function App() {
     document.body.className = darkMode ? 'dark' : 'light'
   }, [darkMode])
 
+const [toastMessage, setToastMessage] = useState('')
+const [showToast, setShowToast] = useState(false)
+const showToast = (message) => {
+  setToastMessage(message)
+  setShowToast(true)
+  setTimeout(() => setShowToast(false), 3000)
+}
+
 
 const themeButtonStyle = {
   backgroundColor: darkMode ? '#5AA1BD' : '#A67B5B',
@@ -85,8 +93,13 @@ const buttonStyle = {
       
       <button
         onClick={async () => {
-          await supabase.auth.signOut()
-          setUser(null)
+          const { error } = await supabase.auth.signOut()
+          if (!error) {
+            setUser(null)
+            showToast('Pomyślnie wylogowano!')
+          } else {
+            showToast('Błąd przy wylogowywaniu!')
+          }
         }}
         style={logoutButtonStyle}
       >
@@ -110,9 +123,25 @@ const buttonStyle = {
           {selectedTopic && <FlashcardList selectedTopic={selectedTopic} darkMode={darkMode} />}
         </div>
       </div>
-    </div>
 
-    
+      {showToast && (
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          backgroundColor: darkMode ? '#5AA1BD' : '#A67B5B',
+          color: darkMode ? '#0E0E0F' : '#ECEBDF',
+          padding: '10px 20px',
+          borderRadius: '8px',
+          fontWeight: 'bold',
+          fontSize: '14px',
+        }}
+    >
+    {toastMessage}
+    </div>
+  )}
+  </div>
   )
 }
 
