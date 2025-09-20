@@ -58,6 +58,19 @@ const buttonStyle = {
   borderRadius: '6px',
   border: 'none',
 }
+
+  const logoutButtonStyle = {
+    position: 'fixed',
+    top: '10px',
+    right: '10px',
+    backgroundColor: darkMode ? '#5AA1BD' : '#A67B5B',
+    color: darkMode ? '#0E0E0F' : '#ECEBDF',
+    padding: '5px 10px',
+    borderRadius: '6px',
+    border: 'none',
+    cursor: 'pointer',
+    zIndex: 1000,
+  }
   
   if (!user) return <Login />
 
@@ -70,6 +83,16 @@ const buttonStyle = {
         {darkMode ? 'Tryb jasny' : 'Tryb ciemny'}
       </button>
       
+      <button
+        onClick={async () => {
+          await supabase.auth.signOut()
+          setUser(null)
+        }}
+        style={logoutButtonStyle}
+      >
+        Wyloguj
+      </button>
+
       <div style={{ display: 'flex', minHeight: '100vh' }}>
         <div style={{ width: '200px', borderRight: '1px solid #ccc', padding: '20px' }}>
           {topics.map(t => (
@@ -88,6 +111,8 @@ const buttonStyle = {
         </div>
       </div>
     </div>
+
+    
   )
 }
 
