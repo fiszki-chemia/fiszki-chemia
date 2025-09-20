@@ -2,13 +2,19 @@ import { useState } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
 
-export default function Login() {
+export default function Login({ initialMessage }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false) // false = logowanie, true = rejestracja
   const [message, setMessage] = useState('') // Stan wiadomości do wyświetlenia
   const [showMessage, setShowMessage] = useState(false) // Stan widoczności wiadomości
 
+  useEffect(() => {
+    if (initialMessage) {
+      showNotification(initialMessage)
+    }
+  }, [initialMessage])
+  
   const handleSubmit = async () => {
     let response;
     if (isRegister) {
