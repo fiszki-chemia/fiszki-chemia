@@ -113,23 +113,6 @@ const buttonStyle = {
           {selectedTopic && <FlashcardList selectedTopic={selectedTopic} darkMode={darkMode} />}
         </div>
       </div>
-
-      {showToast && (
-      <div
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          backgroundColor: darkMode ? '#5AA1BD' : '#A67B5B',
-          color: darkMode ? '#0E0E0F' : '#ECEBDF',
-          padding: '10px 20px',
-          borderRadius: '8px',
-          fontWeight: 'bold',
-          fontSize: '14px',
-        }}
-    >
-    {toastMessage}
-    </div>
   )}
   </div>
   )
