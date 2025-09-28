@@ -11,13 +11,13 @@ export default function Flashcard({ question, answer, flipped }) {
       >
         {/* Przód */}
         <div className="flashcard-front">
-          <p class="noselect"><b>Pytanie:</b></p>
+          <p class="noselect"><b>PYTANIE</b></p>
           <p class="noselect">{question ?? '—'}</p>
         </div>
 
         {/* Tył */}
         <div className="flashcard-back">
-          <p class="noselect"><b>Odpowiedź:</b></p>
+          <p class="noselect"><b>ODPOWIEDŹ</b></p>
           <p class="noselect">{answer ?? '—'}</p>
         </div>
       </div>
