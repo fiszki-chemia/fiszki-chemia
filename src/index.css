@@ -5,6 +5,10 @@
   user-select: none;         /* Standard */
 }
 
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
 body.dark {
   margin: 0;
   padding: 0;
