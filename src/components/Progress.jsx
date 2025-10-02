@@ -39,26 +39,27 @@ export default function Progress({ topic, darkMode, userId, refreshKey }) {
   const percent = progress.total ? Math.round((progress.viewed / progress.total) * 100) : 0
   const barColor = darkMode ? '#5AA1BD' : '#A67B5B'
   const bgColor = darkMode ? '#333' : '#eee'
+  const butColor = darkMode ? '#5AA1BD' : '#A67B5B'
 
   return (
-    <div style={{ margin: '20px auto', width: '80%' }}>
-      <div
-        style={{
-          height: 16,
-          background: bgColor,
-          borderRadius: 8,
-          overflow: 'hidden',
-        }}
-      >
+    <div>
+      <div style={{ margin: '20px auto', width: '80%' }}>
         <div
           style={{
-            width: `${percent}%`,
-            height: '100%',
-            background: barColor,
-            transition: 'width 0.3s ease',
+            height: 16,
+            background: bgColor,
+            borderRadius: 8,
+            overflow: 'hidden',
           }}
         />
-      </div>
+        <div
+            style={{
+              width: `${percent}%`,
+              height: '100%',
+              background: barColor,
+              transition: 'width 0.3s ease',
+            }}
+        />
     </div>
   )
 }
