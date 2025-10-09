@@ -22,7 +22,7 @@ function mapAuthError(message){
       return 'Musisz najpierw potwierdzić swój adres e-mail.'
     default:
       return 'Wystąpił nieznany błąd. Spróbuj ponownie.'
-  }
+  }}
   
   useEffect(() => {
     if (initialMessage) {
