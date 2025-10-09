@@ -95,19 +95,38 @@ const [showPassword, setShowPassword] = useState(false)
           }}
         />
 
+       <div style={{ position: 'relative', width: '379px', marginBottom: '16px' }}>
         <input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder="Hasło"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{
             border: '1px solid #ccc',
             padding: '10px',
-            marginBottom: '16px',
-            width: '379px',
+            width: '100%',
             borderRadius: '4px',
+            paddingRight: '40px', // miejsce na ikonę
           }}
         />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          style={{
+            position: 'absolute',
+            right: '10px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: '#3b82f6',
+            fontSize: '18px',
+          }}
+        >
+          {showPassword ? <FaEyeSlash /> : <FaEye />}
+        </button>
+       </div>
 
         <button
           onClick={handleSubmit}
