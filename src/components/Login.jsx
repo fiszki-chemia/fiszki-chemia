@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+
 
 export default function Login({ initialMessage }) {
   const [email, setEmail] = useState('')
@@ -9,6 +11,8 @@ export default function Login({ initialMessage }) {
   const [message, setMessage] = useState('') // Stan wiadomości do wyświetlenia
   const [showMessage, setShowMessage] = useState(false) // Stan widoczności wiadomości
 
+const [showPassword, setShowPassword] = useState(false)
+  
   useEffect(() => {
     if (initialMessage) {
       showNotification(initialMessage)
