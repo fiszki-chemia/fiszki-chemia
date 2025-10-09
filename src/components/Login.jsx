@@ -12,7 +12,7 @@ export default function Login({ initialMessage }) {
 
 const [showPassword, setShowPassword] = useState(false)
   
-function mapAuthError(message): string {
+function mapAuthError(message){
   switch (message) {
     case 'Invalid login credentials':
       return 'Nieprawidłowy e-mail lub hasło.'
