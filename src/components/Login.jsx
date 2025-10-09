@@ -123,7 +123,7 @@ const [showPassword, setShowPassword] = useState(false)
             fontSize: '18px',
           }}
         >
-          {showPassword ? 🙈 : 👁️}
+          {showPassword ? '🙈' : '👁️'}
         </button>
        </div>
 
