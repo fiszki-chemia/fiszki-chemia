@@ -51,7 +51,7 @@ return (
         borderRadius: 8,
         overflow: 'hidden',
       }}
-    >
+    />
       {/* Wypełnienie paska */}
       <div
         style={{
@@ -61,6 +61,5 @@ return (
           transition: 'width 0.3s ease',
         }}
       />
-    </div>
   </div>
 )
