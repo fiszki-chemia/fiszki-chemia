@@ -41,25 +41,26 @@ export default function Progress({ topic, darkMode, userId, refreshKey }) {
   const bgColor = darkMode ? '#333' : '#eee'
   const butColor = darkMode ? '#5AA1BD' : '#A67B5B'
 
-  return (
-    <div>
-      <div style={{ margin: '20px auto', width: '80%' }}>
-        <div
-          style={{
-            height: 16,
-            background: bgColor,
-            borderRadius: 8,
-            overflow: 'hidden',
-          }}
-        />
-        <div
-            style={{
-              width: `${percent}%`,
-              height: '100%',
-              background: barColor,
-              transition: 'width 0.3s ease',
-            }}
-        />
+return (
+  <div style={{ margin: '20px auto', width: '80%' }}>
+    {/* Tło paska */}
+    <div
+      style={{
+        height: 16,
+        background: bgColor,
+        borderRadius: 8,
+        overflow: 'hidden',
+      }}
+    >
+      {/* Wypełnienie paska */}
+      <div
+        style={{
+          width: `${percent}%`,
+          height: '100%',
+          background: barColor,
+          transition: 'width 0.3s ease',
+        }}
+      />
     </div>
-  )
-}
+  </div>
+)
