@@ -38,7 +38,7 @@ const [showPassword, setShowPassword] = useState(false)
         password,
       })
       if (response.error) {
-        showNotification('Błąd: ' + response.error.message)
+        showNotification('😢 Błąd : ' + response.error.message)
       } else {
         showNotification('Zalogowano!')
         console.log('logged in!');
@@ -58,15 +58,25 @@ const [showPassword, setShowPassword] = useState(false)
     }, 3000) // Znika TwT
   }
 
- return (
-    <div>
+   return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f8f4ea',
+      }}
+    >
       <div
         style={{
           padding: '20px',
           maxWidth: '400px',
-          margin: '40px auto',
+          width: '90%',
           border: '1px solid #ccc',
           borderRadius: '8px',
+          backgroundColor: 'white',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
         }}
       >
         <h2
@@ -75,6 +85,7 @@ const [showPassword, setShowPassword] = useState(false)
             fontWeight: 'bold',
             marginBottom: '20px',
             textAlign: 'center',
+            color: 'green',
           }}
         >
           {isRegister ? 'Rejestracja' : 'Logowanie'}
@@ -91,6 +102,7 @@ const [showPassword, setShowPassword] = useState(false)
             marginBottom: '12px',
             width: '100%',
             borderRadius: '4px',
+            boxSizing: 'border-box',
           }}
         />
 
@@ -106,6 +118,7 @@ const [showPassword, setShowPassword] = useState(false)
               width: '100%',
               borderRadius: '4px',
               paddingRight: '40px',
+              boxSizing: 'border-box',
             }}
           />
           <button
@@ -160,7 +173,6 @@ const [showPassword, setShowPassword] = useState(false)
         </p>
       </div>
 
-      {/* Komunikat w prawym dolnym rogu */}
       {showMessage && (
         <div
           style={{
