@@ -61,5 +61,4 @@ return (
           transition: 'width 0.3s ease',
         }}
       />
-  </div>
 )
