@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 
 export default function Login({ initialMessage }) {
@@ -124,7 +123,7 @@ const [showPassword, setShowPassword] = useState(false)
             fontSize: '18px',
           }}
         >
-          {showPassword ? <FaEyeSlash /> : <FaEye />}
+          {showPassword ? 🙈 : 👁️}
         </button>
        </div>
 
