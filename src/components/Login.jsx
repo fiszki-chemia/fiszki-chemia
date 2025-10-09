@@ -58,7 +58,7 @@ const [showPassword, setShowPassword] = useState(false)
     }, 3000) // Znika TwT
   }
 
-  return (
+ return (
     <div>
       <div
         style={{
@@ -89,43 +89,43 @@ const [showPassword, setShowPassword] = useState(false)
             border: '1px solid #ccc',
             padding: '10px',
             marginBottom: '12px',
-            width: '379px',
+            width: '100%',
             borderRadius: '4px',
           }}
         />
 
-       <div style={{ position: 'relative', width: '379px', marginBottom: '16px' }}>
-        <input
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Hasło"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{
-            border: '1px solid #ccc',
-            padding: '10px',
-            width: '100%',
-            borderRadius: '4px',
-            paddingRight: '40px', // miejsce na ikonę
-          }}
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword(!showPassword)}
-          style={{
-            position: 'absolute',
-            right: '10px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: '#3b82f6',
-            fontSize: '18px',
-          }}
-        >
-          {showPassword ? '🙈' : '👁️'}
-        </button>
-       </div>
+        <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Hasło"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              border: '1px solid #ccc',
+              padding: '10px',
+              width: '100%',
+              borderRadius: '4px',
+              paddingRight: '40px',
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#3b82f6',
+              fontSize: '18px',
+            }}
+          >
+            {showPassword ? '🙈' : '👁️'}
+          </button>
+        </div>
 
         <button
           onClick={handleSubmit}
@@ -144,16 +144,19 @@ const [showPassword, setShowPassword] = useState(false)
 
         <p style={{ marginTop: '16px', textAlign: 'center' }}>
           {isRegister ? 'Masz konto?' : 'Nie masz konta?'}{' '}
-          <span
+          <button
             onClick={() => setIsRegister(!isRegister)}
             style={{
               color: '#3b82f6',
               cursor: 'pointer',
               textDecoration: 'underline',
+              background: 'none',
+              border: 'none',
+              padding: 0,
             }}
           >
             {isRegister ? 'Zaloguj się' : 'Zarejestruj się'}
-          </span>
+          </button>
         </p>
       </div>
 
