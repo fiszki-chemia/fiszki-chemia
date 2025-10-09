@@ -12,6 +12,18 @@ export default function Login({ initialMessage }) {
 
 const [showPassword, setShowPassword] = useState(false)
   
+function mapAuthError(message: string): string {
+  switch (message) {
+    case 'Invalid login credentials':
+      return 'Nieprawidłowy e-mail lub hasło.'
+    case 'User already registered':
+      return 'Ten e-mail jest już zarejestrowany.'
+    case 'Email not confirmed':
+      return 'Musisz najpierw potwierdzić swój adres e-mail.'
+    default:
+      return 'Wystąpił nieznany błąd. Spróbuj ponownie.'
+  }
+  
   useEffect(() => {
     if (initialMessage) {
       showNotification(initialMessage)
@@ -38,7 +50,7 @@ const [showPassword, setShowPassword] = useState(false)
         password,
       })
       if (response.error) {
-        showNotification('😢 Błąd : ' + response.error.message)
+        showNotification('😢 Błąd : ' + mapAuthError(response.error.message))
       } else {
         showNotification('Zalogowano!')
         console.log('logged in!');
