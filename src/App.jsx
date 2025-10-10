@@ -21,15 +21,15 @@ function App() {
   useEffect(() => {
     async function fetchTopics() {
       const { data, error } = await supabase
-        .from('topics')
+        .from('flashcards')
         .select('topic, topic_name')
-        .order('topic_name', { ascending: true })
-    
+        .neq('topic', null)
       if (!error && data && data.length > 0) {
-        setTopics(data)
-        setSelectedTopic(data[0].topic) // ustaw pierwszy temat jako domyślny
-      } else {
-        console.error('Błąd podczas pobierania tematów:', error)
+        const uniqueTopics = Array.from(
+          new Map(data.map(fc => [fc.topic, fc])).values()
+        )
+        setTopics(uniqueTopics)
+        setSelectedTopic(uniqueTopics[0].topic) // <-- pierwszy topic jako domyślny
       }
     }
     fetchTopics()
