@@ -14,7 +14,7 @@ const [showPassword, setShowPassword] = useState(false)
   
 function mapAuthError(message){
   switch (message) {
-    case invalid_credentials:
+    case 'Invalid login credentials':
       return 'Nieprawidłowy e-mail lub hasło.'
     case 'User already registered':
       return 'Ten e-mail jest już zarejestrowany.'
@@ -50,7 +50,7 @@ function mapAuthError(message){
         password,
       })
       if (response.error) {
-        showNotification('😢 Błąd : ' + mapAuthError(error.message))
+        showNotification('😢 Błąd : ' + mapAuthError(response.error.message))
       } else {
         showNotification('Zalogowano!')
         console.log('logged in!');
