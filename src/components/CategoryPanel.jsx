@@ -1,8 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getTopics } from '../supabaseQueries.js'
 import '../index.css'
 
-export default function CategoryPanel({ topics, onSelect, darkMode, toggleDarkMode, handleLogout }) {
+export default function CategoryPanel({ onSelect, darkMode, toggleDarkMode, handleLogout }) {
+  const [topics, setTopics] = useState([])
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchTopics = async () => {
+      const data = await getTopics()
+      setTopics(data)
+    }
+    fetchTopics()
+  }, [])
 
   const panelBg = darkMode ? '#25282C' : '#D8C8B4'
   const categoryBtnBg = darkMode ? '#5AA1BD' : '#A67B5B'
@@ -10,10 +20,8 @@ export default function CategoryPanel({ topics, onSelect, darkMode, toggleDarkMo
 
   return (
     <>
-      {/* Półprzezroczyste tło */}
       {open && <div className="panel-backdrop" onClick={() => setOpen(false)} />}
 
-      {/* Panel */}
       <div
         className="category-panel"
         style={{
@@ -21,10 +29,9 @@ export default function CategoryPanel({ topics, onSelect, darkMode, toggleDarkMo
           transform: open ? 'translateX(0)' : 'translateX(-250px)',
         }}
       >
-        {/* Lista kategorii */}
         <ul>
           {topics.map(t => (
-            <li key={t.topic}>
+            <li key={t.id}>
               <button
                 className="category-btn"
                 style={{
@@ -42,8 +49,14 @@ export default function CategoryPanel({ topics, onSelect, darkMode, toggleDarkMo
           ))}
         </ul>
 
-        {/* Przyciski na dole */}
-        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div
+          style={{
+            marginTop: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
           <button
             className="footer-btn"
             style={{ backgroundColor: categoryBtnBg, color: categoryBtnColor }}
@@ -61,20 +74,20 @@ export default function CategoryPanel({ topics, onSelect, darkMode, toggleDarkMo
         </div>
       </div>
 
-      {/* Przycisk wysuwania panelu – kwadratowy */}
       {!open && (
         <button
           className="panel-toggle-btn"
           style={{
-            backgroundColor: panelBg,             // tło panelu
-            color: darkMode ? '#4277B5' : '#3B6B48', // zawsze kontrastujący kolor ikony
+            backgroundColor: panelBg,
+            color: darkMode ? '#4277B5' : '#3B6B48',
           }}
           onClick={() => setOpen(true)}
         >
           ☰
         </button>
-
       )}
     </>
   )
 }
+
+

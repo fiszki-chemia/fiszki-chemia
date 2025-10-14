@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { supabase } from '../supabase.js'
 import FlashcardNavigator from './FlashcardNavigator.jsx'
 import Progress from './Progress.jsx'
+import { getFlashcardsWithViewed } from '../supabaseQueries.js'
+import { supabase } from '../supabase.js'
 
 export default function FlashcardList({ selectedTopic, darkMode }) {
   const [flashcards, setFlashcards] = useState([])
@@ -11,33 +12,25 @@ export default function FlashcardList({ selectedTopic, darkMode }) {
   const [userId, setUserId] = useState(null)
   const [loadingUser, setLoadingUser] = useState(true)
 
-  // Pobranie zalogowanego użytkownika
   useEffect(() => {
-    const getUser = async () => {
+    const fetchUser = async () => {
       const { data } = await supabase.auth.getUser()
       setUserId(data?.user?.id || null)
       setLoadingUser(false)
     }
-    getUser()
+    fetchUser()
   }, [])
 
-  // Wczytywanie fiszek
   useEffect(() => {
-    if (!selectedTopic) return
+    if (!selectedTopic || !userId) return
     let active = true
-
-    async function fetchFlashcards() {
+    const fetchFlashcards = async () => {
       setLoading(true)
       setError(null)
       try {
-        const { data, error } = await supabase
-          .from('flashcards')
-          .select('*')
-          .eq('topic', selectedTopic)
-        if (error) throw error
-        if (active) setFlashcards(Array.isArray(data) ? data : [])
-      } catch (e) {
-        console.error(e)
+        const data = await getFlashcardsWithViewed(userId, selectedTopic)
+        if (active) setFlashcards(data)
+      } catch (err) {
         if (active) {
           setError('Błąd ładowania fiszek')
           setFlashcards([])
@@ -46,10 +39,9 @@ export default function FlashcardList({ selectedTopic, darkMode }) {
         if (active) setLoading(false)
       }
     }
-
     fetchFlashcards()
     return () => { active = false }
-  }, [selectedTopic])
+  }, [selectedTopic, userId])
 
   const handleViewed = () => setRefreshProgress(r => r + 1)
 

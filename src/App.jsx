@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { supabase } from './supabase.js'
+import { getTopics } from './supabaseQueries.js'
 import Login from './components/Login.jsx'
 import FlashcardList from './components/FlashcardList.jsx'
 import CategoryPanel from './components/CategoryPanel.jsx'
@@ -10,7 +11,7 @@ function App() {
   const [topics, setTopics] = useState([])
   const [selectedTopic, setSelectedTopic] = useState(null)
   const [darkMode, setDarkMode] = useState(false)
-  const [logoutMessage, setLogoutMessage] = useState('') 
+  const [logoutMessage, setLogoutMessage] = useState('')
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
@@ -19,21 +20,16 @@ function App() {
   }, [])
 
   useEffect(() => {
-    async function fetchTopics() {
-      const { data, error } = await supabase
-        .from('flashcards')
-        .select('topic, topic_name')
-        .neq('topic', null)
-      if (!error && data && data.length > 0) {
-        const uniqueTopics = Array.from(
-          new Map(data.map(fc => [fc.topic, fc])).values()
-        )
-        setTopics(uniqueTopics)
-        setSelectedTopic(uniqueTopics[0].topic) // <-- pierwszy topic jako domyślny
-      }
+  async function fetchTopics() {
+    const data = await getTopics()
+    console.log('📘 Pobrane tematy:', data)
+    if (data.length > 0) {
+      setTopics(data)
+      setSelectedTopic(data[0].topic)
     }
-    fetchTopics()
-  }, [])
+  }
+  fetchTopics()
+}, [])
 
 
   useEffect(() => {
@@ -52,7 +48,6 @@ function App() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Panel kategorii */}
       <CategoryPanel
         topics={topics}
         onSelect={setSelectedTopic}
@@ -61,8 +56,6 @@ function App() {
         handleLogout={handleLogout}
       />
 
-
-      {/* Główna zawartość */}
       <div
         style={{
           flex: 1,
@@ -70,7 +63,7 @@ function App() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '20px'
+          padding: '20px',
         }}
       >
         {selectedTopic && (

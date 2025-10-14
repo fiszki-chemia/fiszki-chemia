@@ -6,10 +6,9 @@ import { supabase } from '../supabase.js'
 async function markAsViewed(userId, flashcardId, topic) {
   if (!userId || !flashcardId) return { marked: false }
 
-  // sprawdzamy, czy już obejrzano
   const { data: existing } = await supabase
     .from('user_flashcards')
-    .select('*')
+    .select('id, viewed')
     .eq('user_id', userId)
     .eq('flashcard_id', flashcardId)
     .single()
@@ -49,7 +48,6 @@ export default function FlashcardNavigator({ flashcards: initialFlashcards, dark
       return
     }
 
-    // kopiujemy fiszki i dodajemy pole viewed jeśli go nie ma
     const copied = initialFlashcards.map(f => ({ ...f, viewed: !!f.viewed }))
     setFlashcards(copied)
 
@@ -59,46 +57,75 @@ export default function FlashcardNavigator({ flashcards: initialFlashcards, dark
     setFlipped(false)
   }, [initialFlashcards])
 
-  if (!flashcards.length || currentIndex === null) return <div>Ładowanie fiszek...</div>
+  if (!flashcards?.length || currentIndex === null) return <div>Ładowanie fiszek...</div>
 
   const card = flashcards[currentIndex]
 
-  // Funkcja do flipowania fiszki
+  // Flip i oznaczanie jako obejrzane
   const handleFlip = () => {
-    setFlipped(f => {
-      const newFlipped = !f
-      if (!f && userId && card?.id) {
+    setFlipped(prevFlipped => {
+      const newFlipped = !prevFlipped
+      if (!prevFlipped && userId && card?.id) {
         markAsViewed(userId, card.id, card.topic).then(({ marked }) => {
-          if (marked) {
-            onViewed && onViewed()
-            // aktualizujemy lokalnie viewed w tablicy fiszek
-            setFlashcards(prev => {
-              const copy = [...prev]
-              copy[currentIndex] = { ...copy[currentIndex], viewed: true }
-              return copy
-            })
-          }
+          if (!marked) return
+          onViewed?.()
+          setFlashcards(prev => {
+            const copy = [...prev]
+            copy[currentIndex] = { ...copy[currentIndex], viewed: true }
+            return copy
+          })
         })
       }
       return newFlipped
     })
   }
 
-  // Funkcja losująca następną fiszkę z zasadą 5% dla obejrzanych
+  // pomocnicza: wybiera losowy index z tablicy indeksów, z ograniczeniem excludeIndex i maxAttempts
+  const pickRandomIndexFrom = (indexes, excludeIndex = null, maxAttempts = 20) => {
+    if (!indexes.length) return null
+    if (indexes.length === 1) {
+      return indexes[0] === excludeIndex ? null : indexes[0]
+    }
+
+    let attempts = 0
+    while (attempts < maxAttempts) {
+      attempts++
+      const candidate = indexes[Math.floor(Math.random() * indexes.length)]
+      if (candidate !== excludeIndex) return candidate
+    }
+    // fallback: pick first different
+    for (let i = 0; i < indexes.length; i++) {
+      if (indexes[i] !== excludeIndex) return indexes[i]
+    }
+    return null
+  }
+
+  // showNext: preferuje nowe, ale 5% powtórek
   const showNext = () => {
     if (!flashcards.length) return
 
-    let nextIndex
-    let attempts = 0
-    while (true) {
-      attempts++
-      if (attempts > 100) break // awaryjnie
+    const unviewedIndexes = flashcards.map((f, i) => (!f.viewed ? i : -1)).filter(i => i !== -1)
+    const viewedIndexes = flashcards.map((f, i) => (f.viewed ? i : -1)).filter(i => i !== -1)
 
-      nextIndex = Math.floor(Math.random() * flashcards.length)
-      const nextCard = flashcards[nextIndex]
+    let pool = []
+    // jeśli nie ma nieobejrzanych -> pool = wszystkie
+    if (unviewedIndexes.length === 0) {
+      pool = flashcards.map((_, i) => i)
+    } else {
+      // są nieobejrzane -> 95% z nieobejrzanych, 5% z obejrzanych (jeśli istnieją)
+      const pickViewed = viewedIndexes.length > 0 && Math.random() * 100 < 5
+      pool = pickViewed ? viewedIndexes : unviewedIndexes
+    }
 
-      if (!nextCard.viewed) break // nowe fiszki mają 100% szansy
-      if (Math.random() * 100 < 5) break // obejrzane ~5%
+    // spróbuj wybrać z pool index różny od currentIndex
+    let nextIndex = pickRandomIndexFrom(pool, currentIndex, 20)
+
+    // jeśli nie udało się (np. pool zawiera tylko currentIndex) -> wybierz z całej tablicy bez currentIndex
+    if (nextIndex === null) {
+      const allExceptCurrent = flashcards.map((_, i) => i).filter(i => i !== currentIndex)
+      nextIndex = pickRandomIndexFrom(allExceptCurrent, null, 20)
+      // jeżeli dalej null (np. tylko jedna fiszka), pozwól na currentIndex
+      if (nextIndex === null) nextIndex = currentIndex
     }
 
     setCurrentIndex(nextIndex)
@@ -106,7 +133,7 @@ export default function FlashcardNavigator({ flashcards: initialFlashcards, dark
     setFlipped(false)
   }
 
-  // Funkcja do cofania do poprzedniej fiszki
+  // Cofanie
   const showPrev = () => {
     if (history.length <= 1) return
     setHistory(prev => {

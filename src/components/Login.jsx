@@ -2,75 +2,64 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
 
-
 export default function Login({ initialMessage }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [isRegister, setIsRegister] = useState(false) // false = logowanie, true = rejestracja
-  const [message, setMessage] = useState('') // Stan wiadomości do wyświetlenia
-  const [showMessage, setShowMessage] = useState(false) // Stan widoczności wiadomości
+  const [isRegister, setIsRegister] = useState(false)
+  const [isReset, setIsReset] = useState(false)
+  const [message, setMessage] = useState('')
+  const [showMessage, setShowMessage] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
-const [showPassword, setShowPassword] = useState(false)
-  
-function mapAuthError(message){
-  switch (message) {
-    case 'Invalid login credentials':
-      return 'Nieprawidłowy e-mail lub hasło.'
-    case 'User already registered':
-      return 'Ten e-mail jest już zarejestrowany.'
-    case 'Email not confirmed':
-      return 'Musisz najpierw potwierdzić swój adres e-mail.'
-    default:
-      return 'Wystąpił nieznany błąd. Spróbuj ponownie.'
-  }}
-  
+  function mapAuthError(message){
+    switch (message) {
+      case 'Invalid login credentials':
+        return 'Nieprawidłowy e-mail lub hasło.'
+      case 'User already registered':
+        return 'Ten e-mail jest już zarejestrowany.'
+      case 'Email not confirmed':
+        return 'Musisz najpierw potwierdzić swój adres e-mail.'
+      default:
+        return 'Wystąpił nieznany błąd. Spróbuj ponownie.'
+    }
+  }
+
   useEffect(() => {
-    if (initialMessage) {
-      showNotification(initialMessage)
-    }
+    if (initialMessage) showNotification(initialMessage)
   }, [initialMessage])
-  
+
+  const showNotification = (msg) => {
+    setMessage(msg)
+    setShowMessage(true)
+    setTimeout(() => setShowMessage(false), 3000)
+  }
+
   const handleSubmit = async () => {
-    let response;
+    if (isReset) {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin
+      })
+      if (error) showNotification('😢 Błąd: ' + error.message)
+      else {
+        showNotification('Link do resetu hasła został wysłany na Twój e-mail.')
+        setIsReset(false)
+      }
+      return
+    }
+
+    let response
     if (isRegister) {
-      // Rejestracja
-      response = await supabase.auth.signUp({
-        email,
-        password,
-      })
-      if (response.error) {
-        showNotification('Błąd: ' + response.error.message)
-      } else {
-        showNotification('Konto utworzone! Możesz się teraz zalogować.')
-      }
+      response = await supabase.auth.signUp({ email, password })
+      if (response.error) showNotification('😢 Błąd: ' + response.error.message)
+      else showNotification('Konto utworzone! Możesz się teraz zalogować.')
     } else {
-      // Logowanie
-      response = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-      if (response.error) {
-        showNotification('😢 Błąd : ' + mapAuthError(response.error.message))
-      } else {
-        showNotification('Zalogowano!')
-        console.log('logged in!');
-      }
+      response = await supabase.auth.signInWithPassword({ email, password })
+      if (response.error) showNotification('😢 Błąd: ' + mapAuthError(response.error.message))
+      else showNotification('Zalogowano!')
     }
   }
 
-  // Wyświetla się prostokąt UwU
-  const showNotification = (message) => {
-    console.log('showNotification called');
-    setMessage(message)
-    setShowMessage(true)
-    console.log('wiadomosc wyswietlona');
-    setTimeout(() => {
-      setShowMessage(false)
-      console.log('wiadomosc znika');
-    }, 3000) // Znika TwT
-  }
-
-   return (
+  return (
     <div
       style={{
         minHeight: '100vh',
@@ -100,7 +89,7 @@ function mapAuthError(message){
             color: 'green',
           }}
         >
-          {isRegister ? 'Rejestracja' : 'Logowanie'}
+          {isReset ? 'Reset hasła' : isRegister ? 'Rejestracja' : 'Logowanie'}
         </h2>
 
         <input
@@ -118,39 +107,41 @@ function mapAuthError(message){
           }}
         />
 
-        <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
-          <input
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Hasło"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{
-              border: '1px solid #ccc',
-              padding: '10px',
-              width: '100%',
-              borderRadius: '4px',
-              paddingRight: '40px',
-              boxSizing: 'border-box',
-            }}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            style={{
-              position: 'absolute',
-              right: '10px',
-              top: '50%',
-              transform: 'translateY(-50%)',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#3b82f6',
-              fontSize: '18px',
-            }}
-          >
-            {showPassword ? '🙈' : '👁️'}
-          </button>
-        </div>
+        {!isReset && (
+          <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Hasło"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{
+                border: '1px solid #ccc',
+                padding: '10px',
+                width: '100%',
+                borderRadius: '4px',
+                paddingRight: '40px',
+                boxSizing: 'border-box',
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#3b82f6',
+                fontSize: '18px',
+              }}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
+        )}
 
         <button
           onClick={handleSubmit}
@@ -162,27 +153,32 @@ function mapAuthError(message){
             borderRadius: '4px',
             cursor: 'pointer',
             fontWeight: 'bold',
+            marginBottom: '12px',
           }}
         >
-          {isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
+          {isReset ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
         </button>
 
         <p style={{ marginTop: '16px', textAlign: 'center' }}>
-          {isRegister ? 'Masz konto?' : 'Nie masz konta?'}{' '}
+          {!isReset && (isRegister ? 'Masz konto?' : 'Nie masz konta?')}{' '}
           <button
-            onClick={() => setIsRegister(!isRegister)}
-            style={{
-              color: '#3b82f6',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-              background: 'none',
-              border: 'none',
-              padding: 0,
-            }}
+            onClick={() => { if (isReset) setIsReset(false); else setIsRegister(!isRegister)}}
+            className="login-link"
           >
-            {isRegister ? 'Zaloguj się' : 'Zarejestruj się'}
+            {!isReset ? (isRegister ? 'Zaloguj się' : 'Zarejestruj się') : 'Powrót do logowania'}
           </button>
         </p>
+
+        {!isReset && (
+          <p style={{ marginTop: '8px', textAlign: 'center' }}>
+            <button
+              onClick={() => setIsReset(true)}
+              className="login-link"
+            >
+              Nie pamiętam hasła
+            </button>
+          </p>
+        )}
       </div>
 
       {showMessage && (
