@@ -7,9 +7,31 @@ export default function Login({ initialMessage }) {
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [isReset, setIsReset] = useState(false)
+  const [isRecovery, setIsRecovery] = useState(false)
+  const [recoveryToken, setRecoveryToken] = useState('')
   const [message, setMessage] = useState('')
   const [showMessage, setShowMessage] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(() => {
+    if (initialMessage) showNotification(initialMessage)
+
+    // Sprawdzenie URL pod recovery token
+    const urlParams = new URLSearchParams(window.location.search)
+    const type = urlParams.get('type')
+    const token = urlParams.get('access_token')
+
+    if (type === 'recovery' && token) {
+      setIsRecovery(true)
+      setRecoveryToken(token)
+    }
+  }, [initialMessage])
+
+  const showNotification = (msg) => {
+    setMessage(msg)
+    setShowMessage(true)
+    setTimeout(() => setShowMessage(false), 3000)
+  }
 
   function mapAuthError(message){
     switch (message) {
@@ -24,16 +46,6 @@ export default function Login({ initialMessage }) {
     }
   }
 
-  useEffect(() => {
-    if (initialMessage) showNotification(initialMessage)
-  }, [initialMessage])
-
-  const showNotification = (msg) => {
-    setMessage(msg)
-    setShowMessage(true)
-    setTimeout(() => setShowMessage(false), 3000)
-  }
-
   const handleSubmit = async () => {
     if (isReset) {
       const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -43,6 +55,21 @@ export default function Login({ initialMessage }) {
       else {
         showNotification('Link do resetu hasła został wysłany na Twój e-mail.')
         setIsReset(false)
+      }
+      return
+    }
+
+    if (isRecovery) {
+      // Zmiana hasła przy recovery
+      const { data, error } = await supabase.auth.updateUser(
+        { password },
+        { accessToken: recoveryToken }
+      )
+      if (error) showNotification('😢 Błąd: ' + error.message)
+      else {
+        showNotification('Hasło zostało zmienione! Możesz się teraz zalogować.')
+        setIsRecovery(false)
+        setPassword('')
       }
       return
     }
@@ -89,59 +116,59 @@ export default function Login({ initialMessage }) {
             color: 'green',
           }}
         >
-          {isReset ? 'Reset hasła' : isRegister ? 'Rejestracja' : 'Logowanie'}
+          {isRecovery ? 'Ustaw nowe hasło' : isReset ? 'Reset hasła' : isRegister ? 'Rejestracja' : 'Logowanie'}
         </h2>
 
-        <input
-          type="email"
-          placeholder="Twój e-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{
-            border: '1px solid #ccc',
-            padding: '10px',
-            marginBottom: '12px',
-            width: '100%',
-            borderRadius: '4px',
-            boxSizing: 'border-box',
-          }}
-        />
-
-        {!isReset && (
-          <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Hasło"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                border: '1px solid #ccc',
-                padding: '10px',
-                width: '100%',
-                borderRadius: '4px',
-                paddingRight: '40px',
-                boxSizing: 'border-box',
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: 'absolute',
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#3b82f6',
-                fontSize: '18px',
-              }}
-            >
-              {showPassword ? '🙈' : '👁️'}
-            </button>
-          </div>
+        {(!isRecovery) && (
+          <input
+            type="email"
+            placeholder="Twój e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              border: '1px solid #ccc',
+              padding: '10px',
+              marginBottom: '12px',
+              width: '100%',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
+          />
         )}
+
+        <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Hasło"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              border: '1px solid #ccc',
+              padding: '10px',
+              width: '100%',
+              borderRadius: '4px',
+              paddingRight: '40px',
+              boxSizing: 'border-box',
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: 'absolute',
+              right: '10px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#3b82f6',
+              fontSize: '18px',
+            }}
+          >
+            {showPassword ? '🙈' : '👁️'}
+          </button>
+        </div>
 
         <button
           onClick={handleSubmit}
@@ -156,28 +183,30 @@ export default function Login({ initialMessage }) {
             marginBottom: '12px',
           }}
         >
-          {isReset ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
+          {isRecovery ? 'Ustaw hasło' : isReset ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
         </button>
 
-        <p style={{ marginTop: '16px', textAlign: 'center' }}>
-          {!isReset && (isRegister ? 'Masz konto?' : 'Nie masz konta?')}{' '}
-          <button
-            onClick={() => { if (isReset) setIsReset(false); else setIsRegister(!isRegister)}}
-            className="login-link"
-          >
-            {!isReset ? (isRegister ? 'Zaloguj się' : 'Zarejestruj się') : 'Powrót do logowania'}
-          </button>
-        </p>
+        {!isRecovery && (
+          <>
+            <p style={{ marginTop: '16px', textAlign: 'center' }}>
+              {!isReset && (isRegister ? 'Masz konto?' : 'Nie masz konta?')}{' '}
+              <button
+                onClick={() => { if (isReset) setIsReset(false); else setIsRegister(!isRegister)}}
+                className="login-link"
+              >
+                {!isReset ? (isRegister ? 'Zaloguj się' : 'Zarejestruj się') : 'Powrót do logowania'}
+              </button>
+            </p>
 
-        {!isReset && (
-          <p style={{ marginTop: '8px', textAlign: 'center' }}>
-            <button
-              onClick={() => setIsReset(true)}
-              className="login-link"
-            >
-              Nie pamiętam hasła
-            </button>
-          </p>
+            <p style={{ marginTop: '8px', textAlign: 'center' }}>
+              <button
+                onClick={() => setIsReset(true)}
+                className="login-link"
+              >
+                Nie pamiętam hasła
+              </button>
+            </p>
+          </>
         )}
       </div>
 
