@@ -70,7 +70,7 @@ export default function Login({ initialMessage }) {
     if (isRegister) {
       response = await supabase.auth.signUp({ email, password })
       if (response.error) showNotification('😢 Błąd: ' + response.error.message)
-      else showNotification('Konto utworzone! Możesz się teraz zalogować.')
+      else showNotification('Konto utworzone! Teraz potwierdź swoje adres e-mail.')
     } else {
       response = await supabase.auth.signInWithPassword({ email, password })
       if (response.error) showNotification('😢 Błąd: ' + mapAuthError(response.error.message))
