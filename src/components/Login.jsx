@@ -28,6 +28,7 @@ export default function Login({ initialMessage }) {
   useEffect(() => {
    supabase.auth.onAuthStateChange(async (event, session) => {
      if (event == "PASSWORD_RECOVERY") {
+       console.log('dupa')
        setIsRecovery(true)
      }
    })
