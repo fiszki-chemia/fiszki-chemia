@@ -26,15 +26,12 @@ export default function Login({ initialMessage }) {
   }
 
   useEffect(() => {
-    if (initialMessage) showNotification(initialMessage)
-
-    // Sprawdzenie URL pod recovery token
-    const urlParams = new URLSearchParams(window.location.search)
-    const type = urlParams.get('type')
-    if (type === 'recovery') {
-      setIsRecovery(true)
-    }
-  }, [initialMessage])
+   supabase.auth.onAuthStateChange(async (event, session) => {
+     if (event == "PASSWORD_RECOVERY") {
+       setIsRecovery(true)
+     }
+   })
+ }, [])
 
   const showNotification = (msg) => {
     setMessage(msg)
