@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
 
-export default function Login({ initialMessage }) {
+export default function Login({ initialMessage, isRecoveryStart, onPasswordChangeSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [isReset, setIsReset] = useState(false)
-  const [isRecovery, setIsRecovery] = useState(false)
-  const [message, setMessage] = useState('')
+  const [isRecovery, setIsRecovery] = useState(true)
+  const [message, setMessage] = useState(initialMessage || '')
   const [showMessage, setShowMessage] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -26,13 +26,8 @@ export default function Login({ initialMessage }) {
   }
 
   useEffect(() => {
-   supabase.auth.onAuthStateChange(async (event, session) => {
-     if (event == "PASSWORD_RECOVERY") {
-       console.log('dupa')
-       setIsRecovery(true)
-     }
-   })
- }, [])
+    if (isRecoveryStart) setIsRecovery(true)
+  }, [isRecoveryStart])
 
   const showNotification = (msg) => {
     setMessage(msg)
@@ -60,6 +55,7 @@ export default function Login({ initialMessage }) {
         showNotification('Hasło zostało zmienione! Możesz się teraz zalogować.')
         setIsRecovery(false)
         setPassword('')
+        if (onPasswordChangeSuccess) onPasswordChangeSuccess() // odblokuj możliwość ustawienia usera w App.jsx
       }
       return
     }
@@ -83,7 +79,6 @@ export default function Login({ initialMessage }) {
           {isRecovery ? 'Ustaw nowe hasło' : isReset ? 'Reset hasła' : isRegister ? 'Rejestracja' : 'Logowanie'}
         </h2>
 
-        {/* Pole email */}
         {(isReset || !isRecovery) && (
           <input
             type="email"
@@ -94,8 +89,7 @@ export default function Login({ initialMessage }) {
           />
         )}
 
-        {/* Pole hasła */}
-        {(!isReset) && (
+        {!isReset && (
           <div style={{ position: 'relative', width: '100%', marginBottom: '16px' }}>
             <input
               type={showPassword ? 'text' : 'password'}
