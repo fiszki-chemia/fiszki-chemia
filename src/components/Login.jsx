@@ -7,7 +7,7 @@ export default function Login({ initialMessage, isRecoveryStart, onPasswordChang
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [isReset, setIsReset] = useState(false)
-  const [isRecovery, setIsRecovery] = useState(true)
+  const [isRecovery, setIsRecovery] = useState(false)
   const [message, setMessage] = useState(initialMessage || '')
   const [showMessage, setShowMessage] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
