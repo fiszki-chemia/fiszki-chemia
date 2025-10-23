@@ -2,19 +2,15 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase.js'
 import '../index.css'
 
-export default function Login({ initialMessage, isRecoveryStart }) {
+export default function Login({ initialMessage, isRecoveryStart, onPasswordChangeSuccess }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isRegister, setIsRegister] = useState(false)
   const [isReset, setIsReset] = useState(false)
-  const [isRecovery, setIsRecovery] = useState(false)
-  const [message, setMessage] = useState('')
+  const [isRecovery, setIsRecovery] = useState(true)
+  const [message, setMessage] = useState(initialMessage || '')
   const [showMessage, setShowMessage] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-
-  useEffect(() => {
-    if (isRecoveryStart) setIsRecovery(true)
-  }, [isRecoveryStart])
 
   function mapAuthError(message){
     switch (message) {
@@ -28,6 +24,10 @@ export default function Login({ initialMessage, isRecoveryStart }) {
         return 'Wystąpił nieznany błąd. Spróbuj ponownie.'
     }
   }
+
+  useEffect(() => {
+    if (isRecoveryStart) setIsRecovery(true)
+  }, [isRecoveryStart])
 
   const showNotification = (msg) => {
     setMessage(msg)
@@ -55,6 +55,7 @@ export default function Login({ initialMessage, isRecoveryStart }) {
         showNotification('Hasło zostało zmienione! Możesz się teraz zalogować.')
         setIsRecovery(false)
         setPassword('')
+        if (onPasswordChangeSuccess) onPasswordChangeSuccess() // odblokuj możliwość ustawienia usera w App.jsx
       }
       return
     }
@@ -97,20 +98,13 @@ export default function Login({ initialMessage, isRecoveryStart }) {
               onChange={(e) => setPassword(e.target.value)}
               style={{ border: '1px solid #ccc', padding: '10px', width: '100%', borderRadius: '4px', paddingRight: '40px', boxSizing: 'border-box' }}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#3b82f6', fontSize: '18px' }}
-            >
+            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#3b82f6', fontSize: '18px' }}>
               {showPassword ? '🙈' : '👁️'}
             </button>
           </div>
         )}
 
-        <button
-          onClick={handleSubmit}
-          style={{ backgroundColor: '#3b82f6', color: 'white', padding: '10px', width: '100%', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginBottom: '12px' }}
-        >
+        <button onClick={handleSubmit} style={{ backgroundColor: '#3b82f6', color: 'white', padding: '10px', width: '100%', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginBottom: '12px' }}>
           {isRecovery ? 'Ustaw hasło' : isReset ? 'Wyślij link' : isRegister ? 'Zarejestruj się' : 'Zaloguj się'}
         </button>
 
@@ -147,19 +141,7 @@ export default function Login({ initialMessage, isRecoveryStart }) {
       </div>
 
       {showMessage && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '20px',
-            right: '20px',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            padding: '10px 20px',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            fontSize: '14px',
-          }}
-        >
+        <div style={{ position: 'fixed', bottom: '20px', right: '20px', backgroundColor: '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px' }}>
           {message}
         </div>
       )}
