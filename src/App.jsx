@@ -13,24 +13,48 @@ function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [logoutMessage, setLogoutMessage] = useState('')
 
+  // Ta flaga blokuje automatyczne ustawianie usera podczas zmiany hasła
+  const [isRecovery, setIsRecovery] = useState(false)
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+
   useEffect(() => {
+    // Pobierz sesję przy starcie
     supabase.auth.getSession().then(({ data: { session } }) => setUser(session?.user || null))
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user || null))
+
+    // Słuchaj zmian auth state
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth event:', event)
+
+      if (event === "PASSWORD_RECOVERY") {
+        setIsRecovery(true)
+        setIsChangingPassword(true)
+        setUser(null)
+      } else if (!isChangingPassword) {
+        // Nie ustawiaj usera, jeśli w trakcie zmiany hasła
+        setIsRecovery(false)
+        setUser(session?.user || null)
+      }
+    })
+
     return () => listener.subscription.unsubscribe()
-  }, [])
+  }, [isChangingPassword])
+
+  // Callback przekazywany do Login, żeby zresetować flagę po zmianie hasła
+  const onPasswordChangeSuccess = () => {
+    setIsChangingPassword(false)
+  }
 
   useEffect(() => {
-  async function fetchTopics() {
-    const data = await getTopics()
-    console.log('📘 Pobrane tematy:', data)
-    if (data.length > 0) {
-      setTopics(data)
-      setSelectedTopic(data[0].topic)
+    async function fetchTopics() {
+      const data = await getTopics()
+      console.log('📘 Pobrane tematy:', data)
+      if (data.length > 0) {
+        setTopics(data)
+        setSelectedTopic(data[0].topic)
+      }
     }
-  }
-  fetchTopics()
-}, [])
-
+    fetchTopics()
+  }, [])
 
   useEffect(() => {
     document.body.className = darkMode ? 'dark' : 'light'
@@ -44,7 +68,16 @@ function App() {
     setLogoutMessage('Pomyślnie wylogowano!')
   }
 
-  if (!user) return <Login initialMessage={logoutMessage} />
+  // Jeśli brak usera lub jesteśmy w trybie recovery - pokaż logowanie
+  if (!user || isRecovery) {
+    return (
+      <Login
+        initialMessage={logoutMessage}
+        isRecoveryStart={isRecovery}
+        onPasswordChangeSuccess={onPasswordChangeSuccess}
+      />
+    )
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
